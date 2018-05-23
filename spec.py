@@ -3,7 +3,7 @@
 import simtest
 import simsym
 import z3
-import z3printer
+from z3 import z3printer
 import collections
 import itertools
 import sys
@@ -378,7 +378,7 @@ class TestWriter(simtest.ExecutionMonitorBase):
 
             if args.verbose_testgen:
                 print "Model:"
-                print check.model
+                print check.z3_model
 
             testid = ('_'.join(self.callset_names) +
                       '_' + result.pathid + '_' + str(self.npathmodel))
@@ -394,13 +394,14 @@ class TestWriter(simtest.ExecutionMonitorBase):
             if args.diff_testgen:
                 new_assignments = {}
                 if self.last_assignments is not None:
-                    for aexpr, val in assignments:
-                        hexpr = z3util.HashableAst(aexpr)
-                        sval = str(val)
-                        last_sval = self.last_assignments.get(hexpr)
-                        if last_sval is not None and last_sval != sval:
-                            print '%s: %s -> %s' % (aexpr, last_sval, sval)
-                        new_assignments[hexpr] = sval
+                    for realm, rassigns in assignments.iteritems():
+                        for aexpr, val in rassigns:
+                            hexpr = z3util.HashableAst(aexpr)
+                            sval = str(val)
+                            last_sval = self.last_assignments.get(hexpr)
+                            if last_sval is not None and last_sval != sval:
+                                print '%s: %s -> %s' % (aexpr, last_sval, sval)
+                            new_assignments[hexpr] = sval
                 self.last_assignments = new_assignments
 
             testinfo['assignments'] = {}

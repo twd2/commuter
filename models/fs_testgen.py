@@ -75,6 +75,8 @@ class FsState(object):
     fdmap = {}
     proc = self.pid_to_sproc(pid)
     for symfdnum, fdnum in self.procs[pid].fds.items():
+      #print '++++++++++++++++++++++++++++++++++++++++++++++++++++++'
+      #print type(proc.fd_map)
       if not proc.fd_map.contains(symfdnum):
         continue
       symfd = proc.fd_map[symfdnum]

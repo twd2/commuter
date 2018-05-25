@@ -7,6 +7,7 @@ import types
 import collections
 import inspect
 import graph
+import traceback
 
 class options(object):
     # If set, equality tests eagerly simplify expressions that are
@@ -1404,6 +1405,9 @@ class SymbolicApplyResult(object):
             elif node.typ == "exception" and node is self.__schedule[-1]:
                 bitstring = (bitstring << 1) | node.expr
                 length += 1
+            elif node.typ == "exception" and node is self.__schedule[-2]: # TODO ???
+                bitstring = (bitstring << 1) | node.expr
+                length += 1
             else:
                 raise ValueError("Can't encode schedule node %r" % node)
         # Pad the bitstring to a multiple of four
@@ -1624,7 +1628,8 @@ class Model(object):
 
     def _eval(self, expr, realm=None):
         """Evaluate a Symbolic expression to a concrete Python value."""
-
+        #print '=============================== IN _EVAL ==============================='
+        #traceback.print_stack()
         # model_completion asks Z3 to make up concrete values if they
         # are not interpreted in the model.
         z3val = self.__z3_model.evaluate(unwrap(expr), model_completion=True)

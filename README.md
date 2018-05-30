@@ -1,3 +1,7 @@
+TL;DR: `./spec.py models.socket -m model.out --max-tests-per-path 500 --verbose-testgen --diff-testgen`
+=======================================================================================================
+
+
 Commuter is an automated scalability testing tool that hunts down
 unnecessary sharing in your code.  Unlike traditional scalability
 testing, Commuter doesn't require handcrafted workloads or even
